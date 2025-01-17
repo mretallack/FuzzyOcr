@@ -466,14 +466,14 @@ sub fuzzyocr_do {
             else {
                 infolog("Image is single non-interlaced...");
                 $tfile .= "-fixed.gif";
-                printf RAWERR "## $conf->{focr_bin_giffix} $file >$tfile 2>>$efile\n" if ($haserr>0);
+                #printf RAWERR "## $conf->{focr_bin_giffix} $file >$tfile 2>>$efile\n" if ($haserr>0);
 
                 $retcode = save_execute("$conf->{focr_bin_giffix} $file", undef, ">$tfile", ">>$efile");
 
                 if ($retcode<0) { # only care if we timed out
                     chomp $retcode;
                     errorlog("$conf->{focr_bin_giffix}: Timed out [$retcode], skipping...");
-                    printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
+                    #printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
                     ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
                 }
 
@@ -525,35 +525,35 @@ sub fuzzyocr_do {
                 } else {
                     $tfile .= ".gif";
                 }
-                printf RAWERR qq(## $conf->{focr_bin_gifinter} $cfile >$tfile 2>>$efile\n) if ($haserr>0);
+                #printf RAWERR qq(## $conf->{focr_bin_gifinter} $cfile >$tfile 2>>$efile\n) if ($haserr>0);
 	
                 $retcode = save_execute("$conf->{focr_bin_gifinter} $cfile", undef, ">$tfile", ">>$efile");
 
                 if ($retcode<0) {
                     chomp $retcode;
-                    printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
+                    #printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
                     errorlog("$conf->{focr_bin_gifinter}: Timed out [$retcode], skipping...");
                     ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
                 } elsif ($retcode>0) {
                     chomp $retcode;
-                    printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_gifinter}\n" if ($haserr>0);
+                    #printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_gifinter}\n" if ($haserr>0);
                     errorlog("$conf->{focr_bin_gifinter}: Returned [$retcode], skipping...");
                     ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
                 }
             }
 
-            printf RAWERR qq(## $conf->{focr_bin_giftopnm} $tfile >$pfile 2>>$efile\n) if ($haserr>0);
+            #printf RAWERR qq(## $conf->{focr_bin_giftopnm} $tfile >$pfile 2>>$efile\n) if ($haserr>0);
 
             $retcode = save_execute("$conf->{focr_bin_giftopnm} $tfile", undef, ">$pfile", ">>$efile");
 
             if ($retcode<0) {
                 chomp $retcode;
-                printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
+                #printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_giftopnm}: Timed out [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             } elsif ($retcode>0) {
                 chomp $retcode;
-                printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_giftopnm}\n" if ($haserr>0);
+                #printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_giftopnm}\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_giftopnm}: Returned [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             }
@@ -626,17 +626,17 @@ sub fuzzyocr_do {
                 }
             }
 
-            printf RAWERR qq(## $conf->{focr_bin_pngtopnm} $file >$pfile 2>>$efile\n) if ($haserr>0);
+            #printf RAWERR qq(## $conf->{focr_bin_pngtopnm} $file >$pfile 2>>$efile\n) if ($haserr>0);
             my $retcode = save_execute("$conf->{focr_bin_pngtopnm} $file", undef, ">$pfile", ">>$efile");
 
             if ($retcode<0) {
                 chomp $retcode;
-                printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
+                #printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_pngtopnm}: Timed out [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             } elsif ($retcode>0) {
                 chomp $retcode;
-                printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_pngtopnm}\n" if ($haserr>0);
+                #printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_pngtopnm}\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_pngtopnm}: Returned [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             }
@@ -665,17 +665,17 @@ sub fuzzyocr_do {
                     next;
                 }
             }
-            printf RAWERR qq(## $conf->{focr_bin_bmptopnm} $file >$pfile 2>>$efile\n) if ($haserr>0);
+            #printf RAWERR qq(## $conf->{focr_bin_bmptopnm} $file >$pfile 2>>$efile\n) if ($haserr>0);
 
             my $retcode = save_execute("$conf->{focr_bin_bmptopnm} $file", undef, ">$pfile", ">>$efile");
             if ($retcode<0) {
                 chomp $retcode;
-                printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
+                #printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_bmptopnm}: Timed out [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             } elsif ($retcode>0) {
                 chomp $retcode;
-                printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_bmptopnm}\n" if ($haserr>0);
+                #printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_bmptopnm}\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_bmptopnm}: Returned [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             }
@@ -705,17 +705,17 @@ sub fuzzyocr_do {
                     next;
                 }
             }
-            printf RAWERR qq(## $conf->{focr_bin_tifftopnm} $file >$pfile 2>>$efile\n) if ($haserr>0);
+            #printf RAWERR qq(## $conf->{focr_bin_tifftopnm} $file >$pfile 2>>$efile\n) if ($haserr>0);
             my $retcode = save_execute("$conf->{focr_bin_tifftopnm} $file", undef, ">$pfile", ">>$efile");
 
             if ($retcode<0) {
                 chomp $retcode;
-                printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
+                #printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_tifftopnm}: Timed out [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             } elsif ($retcode>0) {
                 chomp $retcode;
-                printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_tifftopnm}\n" if ($haserr>0);
+                #printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_tifftopnm}\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_tifftopnm}: Returned [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             }
@@ -766,12 +766,12 @@ sub fuzzyocr_do {
 
             if ($retcode<0) {
                 chomp $retcode;
-                printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
+                #printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_pdftops}: Timed out [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             } elsif ($retcode>0) {
                 chomp $retcode;
-                printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_pdftops}\n" if ($haserr>0);
+                #printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_pdftops}\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_pdftops}: Returned [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             }
@@ -780,12 +780,12 @@ sub fuzzyocr_do {
 
             if ($retcode<0) {
                 chomp $retcode;
-                printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
+                #printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_pstopnm}: Timed out [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             } elsif ($retcode>0) {
                 chomp $retcode;
-                printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_pstopnm}\n" if ($haserr>0);
+                #printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_pstopnm}\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_pstopnm}: Returned [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             }
@@ -873,13 +873,13 @@ sub fuzzyocr_do {
             my ($retcode, @result) = $scanset->run($pfile);
             if ($retcode<0) {
                 if ($retcode == -1) {
-                    printf RAWERR qq(Timeout[$conf->{focr_timeout}]: $scancmd\n) if ($haserr>0);
+                    #printf RAWERR qq(Timeout[$conf->{focr_timeout}]: $scancmd\n) if ($haserr>0);
                     errorlog("Timeout[$scanlabel]: \"$scancmd\" took more than $conf->{focr_timeout} sec.");
                 } elsif ($retcode == -2) {
-                    printf RAWERR qq(Cannot exec[$scanlabel]: $scancmd\n) if ($haserr>0);
+                    #printf RAWERR qq(Cannot exec[$scanlabel]: $scancmd\n) if ($haserr>0);
                     errorlog("Cannot execute($scanlabel): \"$scancmd\"");
                 } else {
-                    printf RAWERR qq(Unknown error <$retcode>: $scancmd\n) if ($haserr>0);
+                    #printf RAWERR qq(Unknown error <$retcode>: $scancmd\n) if ($haserr>0);
                     errorlog("Unknown error: [$retcode]...");
                 }
                 infolog("Skipping scanset, trying next...");
@@ -891,7 +891,7 @@ sub fuzzyocr_do {
                 warnlog("Errors in Scanset \"$scanlabel\"");
                 warnlog($errstr);
                 warnlog("Skipping scanset because of errors, trying next...");
-                printf RAWERR qq($errstr\n) if ($haserr>0);
+                #printf RAWERR qq($errstr\n) if ($haserr>0);
                 next;
             }
 

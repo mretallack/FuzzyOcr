@@ -130,9 +130,11 @@ sub save_execute {
 
     my @untainted_args;
     foreach my $arg (@args) {
+      debuglog("arg: $arg");
       if ($arg =~ m|^([\w\-/\.]+)$|) {  # Validate argument
         push @untainted_args, $1;  # Untaint and store in @untainted_args
       } else {
+        debuglog("Invalid or unsafe argument: $arg");
         die "Invalid or unsafe argument: $arg";
       }
     }

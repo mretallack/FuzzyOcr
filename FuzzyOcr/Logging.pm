@@ -31,7 +31,16 @@ sub logfile {
     my $time = strftime("%Y-%m-%d %H:%M:%S",localtime(time));
     $logtext =~ s/\n/\n                      /g;
 
-    unless ( open LOGFILE, ">>", $conf->{focr_logfile} ) {
+    # Validate and untaint the focr_logfile
+    my $untainted_file;
+    if ($conf->{focr_logfile} =~ /^([\w\/\.\-]+)$/) {
+        $untainted_file = $1;  # The untainted version of the filename
+    } else {
+        warn "Invalid filename in focr_logfile: $conf->{focr_logfile}";
+        return;
+    }
+
+    unless ( open LOGFILE, ">>", $untainted_file ) {
        warn "Can't open $conf->{focr_logfile} for writing, check permissions";
        return;
     }
