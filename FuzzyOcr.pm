@@ -585,17 +585,18 @@ sub fuzzyocr_do {
                     next;
                 }
             }
-            printf RAWERR qq(## $conf->{focr_bin_jpegtopnm} $file >$pfile 2>>$efile\n) if ($haserr>0);
+            # removed for now...
+            #printf RAWERR qq(## $conf->{focr_bin_jpegtopnm} $file >$pfile 2>>$efile\n) if ($haserr>0);
             my $retcode = save_execute("$conf->{focr_bin_jpegtopnm} $file", undef, ">$pfile", ">>$efile");
 
             if ($retcode<0) {
                 chomp $retcode;
-                printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
+                #printf RAWERR "?? Timed out > $retcode\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_jpegtopnm}: Timed out [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             } elsif ($retcode>0) {
                 chomp $retcode;
-                printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_jpegtopnm}\n" if ($haserr>0);
+                #printf RAWERR "?? [$retcode] returned from $conf->{focr_bin_jpegtopnm}\n" if ($haserr>0);
                 errorlog("$conf->{focr_bin_jpegtopnm}: Returned [$retcode], skipping...");
                 ++$imgerr if $conf->{focr_keep_bad_images}>0; next;
             }
@@ -868,7 +869,7 @@ sub fuzzyocr_do {
             if (defined $scanset->{args}) {
                 $scancmd .= ' ' . $scanset->{args};
             }
-            printf RAWERR qq(## $scancmd\n) if ($haserr>0);
+            #printf RAWERR qq(## $scancmd\n) if ($haserr>0);
             my ($retcode, @result) = $scanset->run($pfile);
             if ($retcode<0) {
                 if ($retcode == -1) {

@@ -89,6 +89,11 @@ sub open_on_specific_fd($$) {
   $fname =~ s/^>> *// and $flags |= POSIX::O_CREAT|POSIX::O_WRONLY|POSIX::O_APPEND;
   $fname =~ s/^> *//  and $flags |= POSIX::O_CREAT|POSIX::O_WRONLY;
   POSIX::close($fd_target);  # ignore error, we may have just closed a log
+  if ($fname =~ m|^([\w\-./]+)$|) {
+    $fname = $1;  # Untaint $fname by capturing the validated value
+  } else {
+    die "Invalid or unsafe filename: $fname";
+  }
   my($fd_got) = POSIX::open($fname,$flags,$mode);
   defined $fd_got or die "Can't open $fname, flags=$flags: $!";
   $fd_got = 0 + $fd_got;     # turn into numeric, avoid: "0 but true"
@@ -114,6 +119,26 @@ sub save_execute {
     $stderr = '>/dev/null' unless $stderr;
     my $retcode;
     my $begin = [gettimeofday];
+
+    # Validate and untaint $pgm
+    if ($pgm =~ m|^([\w\-/\.]+)$|) {
+      $pgm = $1;  # Untaint $pgm
+    } else {
+      die "Invalid or unsafe program name: $pgm";
+    }
+
+
+    my @untainted_args;
+    foreach my $arg (@args) {
+      if ($arg =~ m|^([\w\-/\.]+)$|) {  # Validate argument
+        push @untainted_args, $1;  # Untaint and store in @untainted_args
+      } else {
+        die "Invalid or unsafe argument: $arg";
+      }
+    }
+
+
+
     if ($conf->{'focr_global_timeout'}) {
         my $pid = fork();
         if (not defined $pid) {
@@ -138,7 +163,7 @@ sub save_execute {
             if (defined $stderr) {
                 open_on_specific_fd(2, $stderr);
             }
-            exec {$pgm} ($pgm,@args);
+            exec {$pgm} ($pgm,@untainted_args);
             die "failed to exec $cmd: $!";
           };
           # couldn't open file descriptors or exec failed
@@ -185,7 +210,7 @@ sub save_execute {
                 if (defined $stderr) {
                     open_on_specific_fd(2, $stderr);
                 }
-                exec {$pgm} ($pgm,@args);
+                exec {$pgm} ($pgm,@untainted_args);
                 die "failed to exec $cmd: $!";
               };
               # couldn't open file descriptors or exec failed
